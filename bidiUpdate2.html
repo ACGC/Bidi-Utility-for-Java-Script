@@ -1,0 +1,44 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>BASE_TXT_DIR</title>
+<style>
+        div.wrapper {
+            position:  absolute;
+            top : 200px;
+            left: 600px;
+            width: 300px;
+            height:300px;
+           
+        }
+
+        input[type="text"] {
+             position: relative;
+             display: block;
+             margin : 0 auto;
+        }
+.P{
+    position:  absolute;
+            top : 150px;
+            left: 600px;
+            width: 300px;
+            height:300px;
+}
+       
+
+    </style>
+</head>
+<body>
+        <p dir="" class="P">BASE TEXT DIRECTION</p>
+        <div class='wrapper'>
+            <p dir="">  يمنى هشام</p>
+            <input  style="align-items: center" type="text" placeholder="What are you doing today?" id="input" onkeyup="handleDynamic(id)"  dir="" size="40">
+            <br></br>
+            <button id="rtl"onclick="chooseDir(id)">RTL Direction</button>
+            <button id="ltr"onclick="chooseDir(id)">LTR Dirction</button>
+            <button id="contextual"onclick="chooseDir(id)">Contextual</button>
+        </div>
+</body>
+<script src="file:///C:/Users/YumnaHisham/Documents/BTD_js/trial/trial_bidi.js"></script>
+</html>
