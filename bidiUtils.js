@@ -26,6 +26,6 @@ function baseTextDir(dir,str,defaultdDir){
     }
   }
   return defaultDir || "ltr";
-   
+ 
   }
 }
