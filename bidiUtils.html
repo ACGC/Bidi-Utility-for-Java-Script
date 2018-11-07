@@ -1,0 +1,111 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>BASE_TXT_DIR</title>
+<script  type="text/javascript"  src='file:///C:/Users/YumnaHisham/Documents/BTD_js/trial/trial_bidi.js'></script>
+<style>
+        div.wrapper {
+            position:  absolute;
+            top : 200px;
+            left: 600px;
+            width: 300px;
+            height:300px;
+           
+        }
+        div.popupBox{
+            position:  absolute;
+            top : 200px;
+            left: 200px;
+            width: 200px;
+            height:200px;
+        }
+
+        input[type="text"] {
+             position: relative;
+             display: block;
+             margin : 0 auto;
+        }
+        button{
+             position: relative;
+             display: block;
+             margin : 0 auto;
+        }
+.P{
+    position:  absolute;
+            top : 150px;
+            left: 600px;
+            width: 300px;
+            height:300px;
+}
+       
+
+    </style>
+</head>
+<body>
+        <div class='popupBox' style="background-color:rgb(5, 4, 4);" id="popupBox" >
+            <p>In which direction do you want your page to be?</p>
+           <button id="rtl" onclick="pagedir(id)">RTL</button>
+           <button id=" " onclick="pagedir(id)">Default</button>
+     
+        </div>
+
+        
+        <div id="test"  class='wrapper'>
+            <p dir="">BASE TEXT DIRECTION</p>
+            <p dir="">  يمنى هشام</p>
+            <p dir="">Welcome مرحبا</p>
+            <p dir="">مرحبا Welcome</p>
+            <input  style="align-items: center" type="text" placeholder="What are you doing today?" id="input" onkeyup="handleDynamic(id)"  dir="" size="40">
+            <br></br>
+            <button id="rtl"onclick="chooseDir(id)">RTL Direction</button>
+            <button id="ltr"onclick="chooseDir(id)">LTR Dirction</button>
+            <button id="contextual"onclick="chooseDir(id)">Contextual</button>
+        </div>
+</body>
+<script type="text/javascript" >
+
+
+    
+        let defaultDir="";
+        let direction="";
+    
+    
+    function pagedir(pagedir){
+    defaultDir=pagedir;
+    }
+
+    
+    function chooseDir(dir){
+      if(dir=="rtl"){
+       direction="rtl";
+        }
+      else if(dir=="ltr")
+       direction="ltr";
+      else if(dir="contextual")
+          direction="auto";
+          handleStatic("p");
+    }
+    
+    function handleDynamic(id){
+    
+      str=document.getElementById(id).value;
+      bidi=baseTextDir(direction,str,defaultDir);
+      document.getElementById(id).dir=bidi;
+      
+    }
+    
+    function handleStatic(tagName)
+    {
+    var elem = document.getElementsByTagName(tagName);
+    for (var i = 0; i < elem.length; i++) {
+      str=elem[i].innerHTML;
+      bidi=baseTextDir(direction,str,defaultDir);
+      elem[i].dir=bidi;
+    
+    }
+    }
+    </script>
+
+
+</html>
