@@ -12,7 +12,7 @@ FilepathDelimiters = "\\/:."
 URLDelimiters = "/:.?=&#"
 EMailDelimiters = "<>@.,;"
 
-function structuralBidi(str, type) {
+var structuralBidi = function(str, type) {
   index = 0;
   indexOfDelimiter = [];
   //console.log(type)
@@ -76,7 +76,7 @@ function structuralBidi(str, type) {
   return newStr;
 
 }
-function baseTextDir(dir, str, defaultdDir = "ltr") {
+var baseTextDir= function(dir, str, defaultdDir = "ltr") {
   if (dir == "rtl")
     return "rtl"
   else if (dir == "ltr")
@@ -251,7 +251,8 @@ function baseTextDir(dir, str, defaultdDir = "ltr") {
 	return {
 
 		shapeNumerals: _shapeNumerals,
-		baseTextDir :_baseTextDir
+		baseTextDir :_baseTextDir,
+		structuralBidi:_structuralBidi
 
 	}
 }())
