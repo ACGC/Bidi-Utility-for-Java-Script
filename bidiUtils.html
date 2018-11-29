@@ -5,22 +5,48 @@
 <title>BASE_TXT_DIR</title>
 <script  type="text/javascript"  src='file:///C:/Users/YumnaHisham/Documents/BTD_js/trial/trial_bidi.js'></script>
 <style>
-        div.wrapper {
+         div.popupBox{
             position:  absolute;
-            top : 200px;
-            left: 600px;
-            width: 300px;
-            height:300px;
-           
-        }
-        div.popupBox{
-            position:  absolute;
-            top : 200px;
-            left: 200px;
+            top : 150px;
+            left: 100px;
             width: 200px;
-            height:200px;
+            height:100px;
+            border: 1px black solid ;
+            padding: 0px 1px 10px 10px;
+            background-color: grey;
         }
-
+        div.dynamic {
+            position:  absolute;
+            top : 400px;
+            left: 500px;
+            width: 300px;
+            height:150px;
+            border: 1px black solid ;
+            padding: 25px 25px 25px 25px;
+            background-color: blue;
+        }
+        
+        div.static{
+            
+            position:  absolute;
+            top : 50px;
+            left: 500px;
+            width: 200px;
+            height:300px;
+            border: 1px black solid ;
+            padding: 0px 1px 10px 10px;
+            background-color:aquamarine;
+        }
+        div.structural{
+            position:  absolute;
+            top : 150px;
+            left: 900px;
+            width: 300px;
+            height:150px;
+            border: 1px black solid ;
+            padding: 25px 25px 25px 25px;
+            background-color: yellow;
+        }
         input[type="text"] {
              position: relative;
              display: block;
@@ -28,9 +54,11 @@
         }
         button{
              position: relative;
-             display: block;
-             margin : 0 auto;
+             display:inline-block;
+             margin-right:5px;
+
         }
+        
 .P{
     position:  absolute;
             top : 150px;
@@ -43,33 +71,50 @@
     </style>
 </head>
 <body>
-        <div class='popupBox' style="background-color:rgb(5, 4, 4);" id="popupBox" >
-            <p>In which direction do you want your page to be?</p>
-           <button id="rtl" onclick="pagedir(id)">RTL</button>
-           <button id=" " onclick="pagedir(id)">Default</button>
-     
+        <div class="popupBox">
+                <p>In case of Contextual Base Text Direction, do you want RTL to be the page direction?</p><!--for numbers and symbols-->
+                <button  id="rtl" onclick="pagedir(id)">Yes</button>
+                
+
         </div>
 
-        
-        <div id="test"  class='wrapper'>
-            <p dir="">BASE TEXT DIRECTION</p>
-            <p dir="">  يمنى هشام</p>
-            <p dir="">Welcome مرحبا</p>
-            <p dir="">مرحبا Welcome</p>
+        <div class="static">
+                <p id="" dir="">BASE TEXT DIRECTION</p>
+                <p id="" dir="">  يمنى هشام</p>
+                <p id="" dir="">Welcome مرحبا</p>
+                <p id="" dir="">مرحبا Welcome</p>
+                <p id="email" dir="">مثال@موقع.com</p>
+                <p id="email" dir="">مثال@موقع.سعودية</p>
+                <p id="url" dir="">https://tajmeeli.com/عمليات-التجميل/</p>
+                <p id="filePath" dir="">C:Projects\apilibrary\عمليات-التجميل</p>
+
+        </div>
+ 
+        <div class="dynamic">
+            <p id="show"></p>
             <input  style="align-items: center" type="text" placeholder="What are you doing today?" id="input" onkeyup="handleDynamic(id)"  dir="" size="40">
             <br></br>
             <button id="rtl"onclick="chooseDir(id)">RTL Direction</button>
             <button id="ltr"onclick="chooseDir(id)">LTR Dirction</button>
             <button id="contextual"onclick="chooseDir(id)">Contextual</button>
         </div>
+
+        <div class="structural">
+                <p id="showStruct"></p>
+                <input  style="align-items: center" type="text" placeholder="Enter Stuctural text." id="inputStruct" onkeypress="dynamicStructural(id,event)"size="40">
+                <br></br>
+                <button id="email"onclick="functionStructType(id)">Email</button>
+                <button  id="url"onclick="functionStructType(id)">URL</button>
+                <button  id="filePath"onclick="functionStructType(id)">File Path</button>
+        </div>
+        
+
+
 </body>
 <script type="text/javascript" >
-
-
-    
         let defaultDir="";
         let direction="";
-    
+        let structType="";
     
     function pagedir(pagedir){
     defaultDir=pagedir;
@@ -77,34 +122,64 @@
 
     
     function chooseDir(dir){
-      if(dir=="rtl"){
+      if(dir=="rtl")
        direction="rtl";
-        }
+        
       else if(dir=="ltr")
        direction="ltr";
       else if(dir="contextual")
           direction="auto";
+
           handleStatic("p");
+         
     }
     
     function handleDynamic(id){
-    
-      str=document.getElementById(id).value;
-      bidi=baseTextDir(direction,str,defaultDir);
+        
+      let str=document.getElementById(id).value;
+      let bidi=baseTextDir(direction,str,defaultDir);
       document.getElementById(id).dir=bidi;
+      let show=document.getElementById("show");
+      show.innerHTML=document.getElementById(id).value
       
     }
-    
-    function handleStatic(tagName)
-    {
-    var elem = document.getElementsByTagName(tagName);
+    function handleStatic(tagName){
+    let elem = document.getElementsByTagName(tagName);
     for (var i = 0; i < elem.length; i++) {
-      str=elem[i].innerHTML;
-      bidi=baseTextDir(direction,str,defaultDir);
-      elem[i].dir=bidi;
+        let str=elem[i].innerHTML;
+        if(elem[i].id=="email"||elem[i].id=="url"||elem[i].id=="filePath"){
+            let structStr=structuralBidi(str,elem[i].id);
+            elem[i].innerHTML=structStr;
+           
+        }
+        else{
+            let bidi=baseTextDir(direction,str,defaultDir);
+            elem[i].dir=bidi;
+        }
+
+    }
+}
+
+  function functionStructType(structuralType){
+    if(structuralType=="email")
+         structType= "email" ;     
+    else if(structuralType=="url")
+        structType= "url";
+    else if(structuralType="filePath")
+        structType="filePath";
     
+   }
+
+   function dynamicStructural(id,event){
+       
+    if (event.keyCode == 13 || event.which == 13){
+        let str=document.getElementById(id).value;
+        //console.log(str)
+        let newStruct=structuralBidi(str,structType);
+        show=document.getElementById("showStruct");
+        show.innerHTML=newStruct;
     }
-    }
+};
     </script>
 
 
