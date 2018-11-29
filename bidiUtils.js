@@ -1,36 +1,114 @@
 (function(){
 	
-	var _baseTextDir = function (dir,str,defaultdDir){
-		  if(dir=="rtl")
-		  return"rtl"
-		  else if(dir=="ltr")
-		  return"ltr"
-		  else if(dir=="auto"){
-		    let chars = '';
-		  RTLchars = new RegExp(
-		    "[\\u061b\\u0621-\\u064a\\u066d-\\u066f\\u0671-\\u06d5"
-		    + "\\u06dd\\u06e5\\u06e6\\u06ee\\u06ef\\u06fa-\\u070d\\u0710\\u0712-\\u072f"
-		    + "\\u074d-\\u07a5\\u07b1\\ufb50-\\ufd3d\\ufd50-\\ufdfc\\ufe70-\\ufefc]"
-		  );
+	
+BidiStructureText_LRM = "\u200e";
+BidiStructureText_RLM = "\u200f";
+BidiStructureText_LRE = '\u202A';
+BidiStructureText_RLE = '\u202B';
+BidiStructureText_PDF = '\u202C';
 
-		  LTRchars = new RegExp("[a-zA-Z]");
-		 
-		  for (var i = 0; i <= str.length; i++) {
-		    chars = str.charAt(i);
+defaultDelimiters = "\\/:."
+FilepathDelimiters = "\\/:."
+URLDelimiters = "/:.?=&#"
+EMailDelimiters = "<>@.,;"
 
-		   if (RTLchars.test(chars)) {
-		      return "rtl"
-		     
-		    }
-		    else if(LTRchars.test(chars)){
-		       return "ltr"
-		    
-		    }
-		  }
-		  return defaultDir || "ltr";
-		 
-		  }
-		}
+function structuralBidi(str, type) {
+  index = 0;
+  indexOfDelimiter = [];
+  //console.log(type)
+  ArabicNum = new RegExp("[u0660\\u0661\\u0662\\u0663\\u0664\\u0665\\u0666\\u0667\\u0668\\u0669]");
+  RTLchars = new RegExp(
+    "[\\u061b\\u0621-\\u064a\\u066d-\\u066f\\u0671-\\u06d5"
+    + "\\u06dd\\u06e5\\u06e6\\u06ee\\u06ef\\u06fa-\\u070d\\u0710\\u0712-\\u072f"
+    + "\\u074d-\\u07a5\\u07b1\\ufb50-\\ufd3d\\ufd50-\\ufdfc\\ufe70-\\ufefc]"
+  );
+  LTRchars = new RegExp("[a-zA-Z]");
+
+  if (type == "email")
+    delimiters = EMailDelimiters;
+  else if (type == "url")
+    delimiters = URLDelimiters;
+  else if (type = "filePath")
+    delimiters = FilepathDelimiters;
+  else delimiters = defaultDelimiters
+  //console.log(delimiters);
+  for (var i = 0; i <= str.length; i++) {
+
+    chars = str.charAt(i);
+    //indexOfDelimiter=[ ];
+    for (var j = 0; j < delimiters.length; j++) {
+      if (chars == delimiters.charAt(j)) {
+
+        indexOfDelimiter[index] = i;
+        index++;
+
+
+      }
+
+
+    }
+  }
+  console.log(indexOfDelimiter);
+  let del = 0;
+  for (var k = 0; k < indexOfDelimiter.length; k++) {
+    delimiterPos = indexOfDelimiter[k];
+    for (var i = delimiterPos - 1; i >= 0; i--) {
+      chars = str.charAt(i);
+      if (RTLchars.test(chars) || LTRchars.test(chars)) {
+        if (RTLchars.test(chars)) {
+
+          // console.log(str); 
+          str = str.slice(0, delimiterPos + del) + BidiStructureText_LRM + str.slice(delimiterPos + del);
+          del += 1;
+          // console.log(str); 
+          break;
+        }
+      }
+      else if (ArabicNum.test(chars)) {
+        break;
+      }
+
+    }
+
+  }
+
+  newStr = BidiStructureText_LRE + str + BidiStructureText_PDF;
+  return newStr;
+
+}
+function baseTextDir(dir, str, defaultdDir = "ltr") {
+  if (dir == "rtl")
+    return "rtl"
+  else if (dir == "ltr")
+    return "ltr"
+  else if (dir == "auto") {
+    let chars = '';
+    RTLchars = new RegExp(
+      "[\\u061b\\u0621-\\u064a\\u066d-\\u066f\\u0671-\\u06d5"
+      + "\\u06dd\\u06e5\\u06e6\\u06ee\\u06ef\\u06fa-\\u070d\\u0710\\u0712-\\u072f"
+      + "\\u074d-\\u07a5\\u07b1\\ufb50-\\ufd3d\\ufd50-\\ufdfc\\ufe70-\\ufefc]"
+    );
+
+    LTRchars = new RegExp("[a-zA-Z]");
+
+    for (var i = 0; i <= str.length; i++) {
+      chars = str.charAt(i);
+
+      if (RTLchars.test(chars)) {
+        return "rtl"
+
+      }
+      else if (LTRchars.test(chars)) {
+        return "ltr"
+
+      }
+    }
+    return defaultDir;
+
+  }
+}
+
+
 
 	
 	/* As of Unicode 7.0, the Arabic script is contained in the following blocks:
