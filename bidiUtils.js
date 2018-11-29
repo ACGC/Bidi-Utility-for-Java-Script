@@ -32,49 +32,42 @@ var structuralBidi = function(str, type) {
     delimiters = FilepathDelimiters;
   else delimiters = defaultDelimiters
   //console.log(delimiters);
+let del = 0;
+
   for (var i = 0; i <= str.length; i++) {
 
-    chars = str.charAt(i);
+    test = str.charAt(i);
     //indexOfDelimiter=[ ];
-    for (var j = 0; j < delimiters.length; j++) {
-      if (chars == delimiters.charAt(j)) {
-
-        indexOfDelimiter[index] = i;
-        index++;
-
-
-      }
-
-
-    }
-  }
-  console.log(indexOfDelimiter);
-  let del = 0;
-  for (var k = 0; k < indexOfDelimiter.length; k++) {
-    delimiterPos = indexOfDelimiter[k];
-    for (var i = delimiterPos - 1; i >= 0; i--) {
-      chars = str.charAt(i);
-      if (RTLchars.test(chars) || LTRchars.test(chars)) {
-        if (RTLchars.test(chars)) {
-
-          // console.log(str); 
-          str = str.slice(0, delimiterPos + del) + BidiStructureText_LRM + str.slice(delimiterPos + del);
-          del += 1;
-          // console.log(str); 
-          break;
-        }
-      }
-      else if (ArabicNum.test(chars)) {
+    for (var j = 0; j <delimiters.length; j++) {
+      if (test == delimiters.charAt(j)) {
+        for (var k = i-1; k >= 0; k--) {
+          chars = str.charAt(k);
+          if (RTLchars.test(chars) || LTRchars.test(chars)) {
+            if (RTLchars.test(chars)) {
+    
+              // console.log(str); 
+              str = str.slice(0, i+del) + BidiStructureText_LRM + str.slice(i+del);
+              del += 1;
+              // console.log(str); 
+              break;
+            }
+            break;
+          }
+          else if (ArabicNum.test(chars)) {
+            break;
+          }
+    
         break;
+    
       }
-
+      }     
     }
-
   }
+  
+    
 
   newStr = BidiStructureText_LRE + str + BidiStructureText_PDF;
   return newStr;
-
 }
 var baseTextDir= function(dir, str, defaultdDir = "ltr") {
   if (dir == "rtl")
